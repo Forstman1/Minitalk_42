@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sahafid <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 13:38:37 by sahafid           #+#    #+#             */
-/*   Updated: 2022/02/07 13:38:40 by sahafid          ###   ########.fr       */
+/*   Created: 2021/11/07 10:15:39 by sahafid           #+#    #+#             */
+/*   Updated: 2021/11/14 17:39:39 by sahafid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/signal.h>
-
-
-
-
-int main(int argc, char *argv[])
+char	*ft_strrchr(const char *str, int c)
 {
-    int i;
-    int fd;
+	char	*h;
+	char	a;
+	int		j;
 
-    fd = (int)argv[1];
-    printf("%d", fd);
-    i = kill(fd, SIGUSR1);
-    printf("\n%d", i);
-    return 0;
+	h = (char *)str;
+	j = 0;
+	a = (char) c;
+	while (h[j])
+		j++;
+	while (j >= 0)
+	{
+		if (h[j] == a)
+			return (&h[j]);
+		j--;
+	}
+	return (0);
 }

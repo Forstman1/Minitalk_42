@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sahafid <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 13:38:37 by sahafid           #+#    #+#             */
-/*   Updated: 2022/02/07 13:38:40 by sahafid          ###   ########.fr       */
+/*   Created: 2021/11/07 12:14:48 by sahafid           #+#    #+#             */
+/*   Updated: 2021/11/07 12:17:13 by sahafid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/signal.h>
-
-
-
-
-int main(int argc, char *argv[])
+char	*ft_strdup(const char *src)
 {
-    int i;
-    int fd;
+	int		src_len;
+	char	*dest;
+	char	*a;
 
-    fd = (int)argv[1];
-    printf("%d", fd);
-    i = kill(fd, SIGUSR1);
-    printf("\n%d", i);
-    return 0;
+	src_len = ft_strlen(src);
+	a = (char *)src;
+	dest = (char *)malloc(src_len + 1 * sizeof(char));
+	if (!dest)
+		return (NULL);
+	ft_strcpy(dest, a);
+	return (dest);
 }

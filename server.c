@@ -14,28 +14,35 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <signal.h>
+#include <sys/signal.h>
 
 
 int x = 0;
 
+void    test(int user)
+{
+    printf("%d", user);
+    printf("im working\n");
+}
+
 void    client(int sig)
 {
-    if (x == 0)
-    {
-        printf("im working");
-        printf("%d", sig);
-    }
+    printf("im working\n");
+    printf("%d", sig);
 }
 
 int main(int argc, char *argv[])
 {
-    struct sigaction sa = { 0 };
+    struct sigaction sa;
     sa.sa_handler = &client;
 
-    printf("%d", getpid());
-    sigaction(SIGUSR1, &sa, NULL);
+    printf("%d\n", getppid());
+    while(1)
+    {
+        signal(SIGUSR1, client);
+        pause();
+    }
+    sleep(1);
     
-    sleep(10);
-
     return 0;
 }

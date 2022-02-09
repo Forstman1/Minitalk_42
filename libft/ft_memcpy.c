@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sahafid <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 13:38:37 by sahafid           #+#    #+#             */
-/*   Updated: 2022/02/07 13:38:40 by sahafid          ###   ########.fr       */
+/*   Created: 2021/11/07 10:41:11 by sahafid           #+#    #+#             */
+/*   Updated: 2021/11/07 10:44:02 by sahafid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/signal.h>
-
-
-
-
-int main(int argc, char *argv[])
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-    int i;
-    int fd;
+	size_t	i;
+	char	*a;
+	char	*b;
 
-    fd = (int)argv[1];
-    printf("%d", fd);
-    i = kill(fd, SIGUSR1);
-    printf("\n%d", i);
-    return 0;
+	a = (char *)dst;
+	b = (char *)src;
+	i = 0;
+	if (!dst && !src)
+		return (NULL);
+	while (i < n)
+	{
+		a[i] = b[i];
+		i++;
+	}
+	dst = a;
+	return (dst);
 }

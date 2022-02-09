@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sahafid <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 13:38:37 by sahafid           #+#    #+#             */
-/*   Updated: 2022/02/07 13:38:40 by sahafid          ###   ########.fr       */
+/*   Created: 2021/11/12 12:47:28 by sahafid           #+#    #+#             */
+/*   Updated: 2021/11/12 12:47:29 by sahafid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/signal.h>
-
-
-
-
-int main(int argc, char *argv[])
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-    int i;
-    int fd;
-
-    fd = (int)argv[1];
-    printf("%d", fd);
-    i = kill(fd, SIGUSR1);
-    printf("\n%d", i);
-    return 0;
+	if (!(*lst))
+		*lst = new;
+	else
+	{
+		new->next = *lst;
+		*lst = new;
+	}
 }

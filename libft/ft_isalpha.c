@@ -1,33 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sahafid <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 13:38:37 by sahafid           #+#    #+#             */
-/*   Updated: 2022/02/07 13:38:40 by sahafid          ###   ########.fr       */
+/*   Created: 2021/11/07 09:59:46 by sahafid           #+#    #+#             */
+/*   Updated: 2021/11/07 10:02:07 by sahafid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/signal.h>
-
-
-
-
-int main(int argc, char *argv[])
+int	ft_isalpha(int a)
 {
-    int i;
-    int fd;
-
-    fd = (int)argv[1];
-    printf("%d", fd);
-    i = kill(fd, SIGUSR1);
-    printf("\n%d", i);
-    return 0;
+	return ((65 <= a && a <= 90)
+		|| (97 <= a && a <= 122));
 }

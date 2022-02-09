@@ -1,33 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sahafid <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 13:38:37 by sahafid           #+#    #+#             */
-/*   Updated: 2022/02/07 13:38:40 by sahafid          ###   ########.fr       */
+/*   Created: 2021/11/05 08:50:56 by sahafid           #+#    #+#             */
+/*   Updated: 2021/11/07 12:25:55 by sahafid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/signal.h>
-
-
-
-
-int main(int argc, char *argv[])
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-    int i;
-    int fd;
+	char	*a;
+	char	*b;
+	char	*c;
+	int		i;
 
-    fd = (int)argv[1];
-    printf("%d", fd);
-    i = kill(fd, SIGUSR1);
-    printf("\n%d", i);
-    return 0;
+	i = 0;
+	a = (char *)s1;
+	b = (char *)s2;
+	if (!(s1) || !(s2))
+		return (NULL);
+	c = (char *)malloc((ft_strlen(a) + ft_strlen(b) + 1) * 1);
+	if (!c)
+		return (NULL);
+	ft_strcpy(c, a);
+	ft_strcat(c, b);
+	return (c);
 }

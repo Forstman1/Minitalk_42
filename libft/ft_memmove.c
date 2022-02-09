@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sahafid <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 13:38:37 by sahafid           #+#    #+#             */
-/*   Updated: 2022/02/07 13:38:40 by sahafid          ###   ########.fr       */
+/*   Created: 2021/11/07 10:47:13 by sahafid           #+#    #+#             */
+/*   Updated: 2021/11/07 11:11:45 by sahafid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/signal.h>
-
-
-
-
-int main(int argc, char *argv[])
+void	*ft_memmove(void *dst, const void *src, size_t n)
 {
-    int i;
-    int fd;
+	char	*a;
+	char	*b;
 
-    fd = (int)argv[1];
-    printf("%d", fd);
-    i = kill(fd, SIGUSR1);
-    printf("\n%d", i);
-    return 0;
+	a = (char *) dst;
+	b = (char *) src;
+	if (a == b)
+		return (b);
+	if (a < b)
+		return (ft_memcpy(a, b, n));
+	else
+	{
+		n -= 1;
+		while (0 < n + 1)
+		{
+			a[n] = b[n];
+			n--;
+		}
+	}
+	return (dst);
 }

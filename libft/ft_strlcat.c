@@ -1,33 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sahafid <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 13:38:37 by sahafid           #+#    #+#             */
-/*   Updated: 2022/02/07 13:38:40 by sahafid          ###   ########.fr       */
+/*   Created: 2021/11/07 11:22:09 by sahafid           #+#    #+#             */
+/*   Updated: 2021/11/07 12:12:34 by sahafid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/signal.h>
-
-
-
-
-int main(int argc, char *argv[])
+size_t	ft_strlcat(char *dst, const char *src, size_t n)
 {
-    int i;
-    int fd;
+	size_t	len;
+	size_t	o;
+	size_t	i;
+	char	*a;
 
-    fd = (int)argv[1];
-    printf("%d", fd);
-    i = kill(fd, SIGUSR1);
-    printf("\n%d", i);
-    return 0;
+	a = (char *)src;
+	i = 0;
+	len = ft_strlen(dst);
+	o = ft_strlen(a);
+	if (n < len)
+		o += n;
+	else if (n >= len)
+		o += len;
+	while (a[i] != 0 && len + 1 < n)
+	{
+		dst[len] = a[i];
+		i++;
+		len++;
+	}
+	dst[len] = '\0';
+	return (o);
 }

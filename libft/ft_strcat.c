@@ -1,33 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client.c                                           :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sahafid <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/07 13:38:37 by sahafid           #+#    #+#             */
-/*   Updated: 2022/02/07 13:38:40 by sahafid          ###   ########.fr       */
+/*   Created: 2021/06/30 16:50:56 by sahafid           #+#    #+#             */
+/*   Updated: 2021/07/08 17:26:40 by sahafid          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-#include <sys/signal.h>
-
-
-
-
-int main(int argc, char *argv[])
+char	*ft_strcat(char *dest, char *src)
 {
-    int i;
-    int fd;
+	int	i;
+	int	n;
 
-    fd = (int)argv[1];
-    printf("%d", fd);
-    i = kill(fd, SIGUSR1);
-    printf("\n%d", i);
-    return 0;
+	i = 0;
+	n = 0;
+	while (dest[i] != '\0')
+	{
+		i++;
+	}
+	while (src[n] != '\0')
+	{
+		dest[i] = src[n];
+		i++;
+		n++;
+	}
+	dest[i] = '\0';
+	return (dest);
 }

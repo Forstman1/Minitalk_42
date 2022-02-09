@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <signal.h>
+#include "libft/libft.h"
 #include <sys/signal.h>
 
 
@@ -21,28 +22,28 @@ int x = 0;
 
 void    test(int user)
 {
-    printf("%d", user);
-    printf("im working\n");
+    if (user == SIGUSR1)
+        printf("\nReceive SIGUSR1\n");
+    else if (user == SIGUSR2)
+        printf("\nReceive SIGUSR2\n");
 }
 
-void    client(int sig)
-{
-    printf("im working\n");
-    printf("%d", sig);
-}
 
 int main(int argc, char *argv[])
 {
-    struct sigaction sa;
-    sa.sa_handler = &client;
 
-    printf("%d\n", getppid());
+    printf("%d\n", getpid());
+    if (signal(SIGUSR1, test) == SIG_ERR)
+        printf("not received");
+    else if (signal(SIGUSR2, test) == SIG_ERR)
+        printf("not received"); 
+    
+
     while(1)
     {
-        signal(SIGUSR1, client);
-        pause();
+        sleep(1);
     }
-    sleep(1);
+    
     
     return 0;
 }

@@ -18,32 +18,52 @@
 #include "libft/libft.h"
 #include <sys/signal.h>
 
-  
 
-void    convertingbinary(int i, int fd)
+
+void    reminder(int i, int fd, int *count)
 {
-    printf("%c\n", i);
-    if (i == 0)
-        kill(fd, SIGUSR1);
-    else if (i == 1)
-        kill(fd, SIGUSR2);
-    else
+    while ((*count) < 6)
     {
-        
-        convertingbinary((i / 2), fd);
-        convertingbinary((i % 2), fd);
+        kill(fd, SIGUSR1);
+        (*count)++;
+    }
+}
+
+void    convertingbinary(int i, int fd, int *j)
+{
+    printf("%d\n", i);
+    if (i == 0)
+    {
+        kill(fd, SIGUSR1);
+        (*j)++;
+        sleep(1);
+    }
+    else if (i == 1)
+    {
+        kill(fd, SIGUSR2);
+        (*j)++;
+        sleep(1);
+    }
+    else if (i > 1)
+    {
+        convertingbinary((i / 2), fd, j);
+        convertingbinary((i % 2), fd, j);
     }
 }
 
 void    convertingascii(char *str, int fd)
 {
     int i;
+    int count;
+
 
     i = 0;
+    count = 0;
     while (str[i])
-    {
-        printf("%c\n", str[i]);
-        convertingbinary(str[i], fd);
+    { 
+        count = 0;
+        convertingbinary(str[i], fd, &count);
+        reminder(str[i], fd, &count);
         i++;
     }
 }

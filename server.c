@@ -19,61 +19,74 @@
 
 
 int x = 0;
-int tab[7] = {0};
 
-void    test(int user)
+void    convertingtoascii(int *count)
 {
     int i;
-    i = 0;
-    
-    if (user == SIGUSR1)
+    int decimal;
+    int weight;
+    int rem;
+
+    rem = 0;
+    decimal = 0;
+    weight = 1;
+    i = 7;
+
+    while (i >= 0)
     {
-        printf("\nReceive SIGUSR1\n");
-        tab[x] = 0;
-		
-		if (x == 7)
-        {
-			x = 0;
-        	while (i <= 7)
-        	{
-            	printf("\n%d\n", tab[i]);
-           		i++;
-        	}
-    	}
-		x++;
+        rem = count[i];
+        decimal = decimal + rem*weight;
+        weight = weight*2;
+        i--;
     }
-    else if (user == SIGUSR2)
+    ft_putchar_fd(decimal, 1);
+    i = 7;
+    while (i >= 0)
     {
-        printf("\nReceive SIGUSR2\n");
-        tab[x] = 1;
-		if (x == 7)
-        {
-			x = 0;
-        	while (i <= 7)
-        	{
-            	printf("\n%d\n", tab[i]);
-           		i++;
-        	}
-    	}
-		printf("\n%d\n", x);
-        x++;
+        count[i] = 0;
+        i--;
     }
 }
 
+void    test(int user)
+{
+    static int i = 0;
+    static int count[8] = {0};
+    
+    if (user == SIGUSR1)
+    {
+        count[i] = 1;
+        i++;
+        if (i == 8)
+        {
+            i = 0;
+            convertingtoascii(count);
+        }
+    }
+    else if (user == SIGUSR2)
+    {
+        count[i] = 0;
+        i++;
+        if (i == 8)
+        {
+            i = 0; 
+            convertingtoascii(count);
+        }
+    }
+}
 
 int main(int argc, char *argv[])
 {
+	struct sigaction sa;
+
+	sa.sa_handler = &test;
 
     printf("%d\n", getpid());
-    if (signal(SIGUSR1, test) == SIG_ERR)
-        printf("not received");
-    else if (signal(SIGUSR2, test) == SIG_ERR)
-        printf("not received"); 
-    
+
+	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
     while(1)
-    {
         sleep(1);
-    }
     
     
     return 0;

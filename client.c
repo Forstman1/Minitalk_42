@@ -13,36 +13,70 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <signal.h>
 #include "libft/libft.h"
 #include <sys/signal.h>
 
+int x = 0;
 
-
-void    reminder(int i, int fd, int *count)
+static void    sending(int *count, int fd)
 {
-    while ((*count) < 6)
+    int j;
+    int i;
+    int temp;
+
+    j = 0;
+    i = 0;
+    temp = 0;
+    while(j <= 7)
     {
-        kill(fd, SIGUSR1);
-        (*count)++;
+        if (count[j] == 0)
+            i++;
+        j++;
+    }
+    
+    while(i > 0)
+    {
+      j = 7;
+      while (j > 0)
+      {
+        temp = count[j - 1];
+        count[j - 1] = count[j];
+        count[j] = temp;
+        j--;
+      }
+      i--;
+    }
+    
+    j = 0;
+    while(j <= 7)
+    {
+        if (count[j] != 0 && count[j] != 1 && count[j] != 2)
+            count[j] = 0;
+        if (count[j] == 1)
+            kill(fd, SIGUSR1);
+        if (count[j] == 0)
+            kill(fd, SIGUSR2);
+        if (count[j] == 2)
+            kill(fd, SIGUSR2);
+        usleep(500);
+        j++;
     }
 }
 
 void    convertingbinary(int i, int fd, int *j)
 {
-    printf("%d\n", i);
     if (i == 0)
     {
-        kill(fd, SIGUSR1);
-        (*j)++;
-        sleep(1);
+        j[x] = 2;
+        x++;
     }
     else if (i == 1)
     {
-        kill(fd, SIGUSR2);
-        (*j)++;
-        sleep(1);
+        j[x] = 1;
+        x++;
     }
     else if (i > 1)
     {
@@ -51,33 +85,40 @@ void    convertingbinary(int i, int fd, int *j)
     }
 }
 
+void    sendingchar(char c, int fd)
+{
+    int count[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+
+    x = 0;
+    convertingbinary(c, fd, count);
+    sending(count, fd);
+}
+
+
+
 void    convertingascii(char *str, int fd)
 {
     int i;
-    int count;
 
 
     i = 0;
-    count = 0;
     while (str[i])
-    { 
-        count = 0;
-        convertingbinary(str[i], fd, &count);
-        reminder(str[i], fd, &count);
+    {
+        sendingchar(str[i], fd);
         i++;
     }
 }
-
 
 int main(int argc, char *argv[])
 {
     int i;
     int fd;
+    char *s;
 
 	fd = 0;
     fd = ft_atoi(argv[1]);
+
     convertingascii(argv[2], fd);
-    
     return 0;
 }
  

@@ -17,7 +17,6 @@
 #include <unistd.h>
 #include <signal.h>
 #include "libft/libft.h"
-#include "Printf/ft_printf.h"
 #include <sys/signal.h>
 
 int x = 0;
@@ -86,7 +85,7 @@ void    convertingbinary(int i, int fd, int *j)
 
 void    sendingchar(char c, int fd)
 {
-    int count[8] = {0};
+    int count[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
     x = 0;
     convertingbinary(c, fd, count);

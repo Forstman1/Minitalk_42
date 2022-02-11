@@ -8,8 +8,8 @@ NAME = server
 all: $(NAME)
 
 $(NAME) : server.c client.c
-	@$(CC) server.c libft.a -o server
-	@$(CC) client.c libft.a -o client
+	@$(CC) server.c libft.a Printf/libftprintf.a -o server
+	@$(CC) client.c libft.a Printf/libftprintf.a -o client
 	@echo "good to go"
 
 

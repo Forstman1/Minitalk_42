@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include "libft/libft.h"
+#include "Printf/ft_printf.h"
 #include <sys/signal.h>
 
 
@@ -50,9 +51,11 @@ void    convertingtoascii(int *count)
 
 void    test(int user)
 {
-    static int i = 0;
+    static int i;
     static int count[8] = {0};
     
+    if (!i)
+        i = 0;
     if (user == SIGUSR1)
     {
         count[i] = 1;
@@ -78,16 +81,15 @@ void    test(int user)
 int main(int argc, char *argv[])
 {
 	struct sigaction sa;
-
+    sa.sa_flags = SA_RESTART;
 	sa.sa_handler = &test;
 
-    printf("%d\n", getpid());
+    ft_printf("%d\n", getpid());
 
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
     while(1)
         sleep(1);
-    
     
     return 0;
 }

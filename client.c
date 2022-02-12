@@ -86,7 +86,7 @@ void    convertingbinary(int i, int fd, int *j)
 
 void    sendingchar(char c, int fd)
 {
-    int count[8] = {0};
+    int count[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
     x = 0;
     convertingbinary(c, fd, count);
@@ -108,15 +108,27 @@ void    convertingascii(char *str, int fd)
     }
 }
 
+void    send(int user)
+{
+    if (user == SIGUSR1)
+        printf("Message received From SIGUSR1\n");
+    if (user == SIGUSR2)
+        printf("Message received From SIGUSR2\n");
+}
+
 int main(int argc, char *argv[])
 {
+    struct sigaction    sa;
     int i;
     int fd;
     char *s;
 
 	fd = 0;
+    sa.sa_flags = SA_RESTART;
+    sa.sa_handler = &send;
     fd = ft_atoi(argv[1]);
-
+    sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
     convertingascii(argv[2], fd);
     return 0;
 }

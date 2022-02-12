@@ -49,10 +49,10 @@ void    convertingtoascii(int *count)
     }
 }
 
-void    test(int user)
+void    test(int user, siginfo_t *ptr, void *ptr1)
 {
     static int i;
-    static int count[8] = {0};
+    static int count[8] = {0, 0, 0, 0, 0, 0, 0, 0};
     
     if (!i)
         i = 0;
@@ -63,6 +63,7 @@ void    test(int user)
         if (i == 8)
         {
             i = 0;
+            kill(ptr->si_pid, SIGUSR1);
             convertingtoascii(count);
         }
     }
@@ -73,16 +74,23 @@ void    test(int user)
         if (i == 8)
         {
             i = 0; 
+            kill(ptr->si_pid, SIGUSR2);
             convertingtoascii(count);
         }
     }
-}
+} 
 
 int main(int argc, char *argv[])
 {
-	struct sigaction sa;
-    sa.sa_flags = SA_RESTART;
-	sa.sa_handler = &test;
+	struct sigaction    sa;
+    sigset_t            sig_set;
+
+    sigemptyset(&sig_set);
+    sigaddset(&sig_set, SIGUSR1);
+    sigaddset(&sig_set, SIGUSR2);
+	sa.sa_sigaction = test;
+    sa.sa_flags = SA_SIGINFO;
+    sa.sa_mask = sig_set;
 
     ft_printf("%d\n", getpid());
 

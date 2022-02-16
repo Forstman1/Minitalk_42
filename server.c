@@ -18,86 +18,104 @@
 #include "Printf/ft_printf.h"
 #include <sys/signal.h>
 
+int	g_pid;
 
-int x = 0;
-
-void    convertingtoascii(int *count)
+void	ft_putchar(int c, int fd)
 {
-    int i;
-    int decimal;
-    int weight;
-    int rem;
-
-    rem = 0;
-    decimal = 0;
-    weight = 1;
-    i = 7;
-
-    while (i >= 0)
-    {
-        rem = count[i];
-        decimal = decimal + rem*weight;
-        weight = weight*2;
-        i--;
-    }
-    ft_putchar_fd(decimal, 1);
-    i = 7;
-    while (i >= 0)
-    {
-        count[i] = 0;
-        i--;
-    }
+	write(fd, &c, sizeof(c));
 }
 
-void    test(int user, siginfo_t *ptr, void *ptr1)
+
+void	reset(int *i, int *count)
 {
-    static int i;
-    static int count[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-    
-    if (!i)
-        i = 0;
-    if (user == SIGUSR1)
-    {
-        count[i] = 1;
-        i++;
-        if (i == 8)
-        {
-            i = 0;
-            kill(ptr->si_pid, SIGUSR1);
-            convertingtoascii(count);
-        }
-    }
-    else if (user == SIGUSR2)
-    {
-        count[i] = 0;
-        i++;
-        if (i == 8)
-        {
-            i = 0; 
-            kill(ptr->si_pid, SIGUSR2);
-            convertingtoascii(count);
-        }
-    }
-} 
+	int	j;
 
-int main(int argc, char *argv[])
+	j = 7;
+	*i = 0;
+	while (j >= 0)
+	{
+		count[j] = 0;
+		j--;
+	}
+}
+
+void	convertingtoascii(int *count)
 {
-	struct sigaction    sa;
-    sigset_t            sig_set;
+	int	i;
+	int	decimal;
+	int	weight;
+	int	rem;
 
-    sigemptyset(&sig_set);
-    sigaddset(&sig_set, SIGUSR1);
-    sigaddset(&sig_set, SIGUSR2);
-	sa.sa_sigaction = test;
-    sa.sa_flags = SA_SIGINFO;
-    sa.sa_mask = sig_set;
+	rem = 0;
+	decimal = 0;
+	weight = 1;
+	i = 7;
+	while (i >= 0)
+	{
+		rem = count[i];
+		decimal = decimal + rem * weight;
+		weight = weight * 2;
+		i--;
+	}
+	ft_putchar(decimal, 1);
+	i = 7;
+	while (i >= 0)
+	{
+		count[i] = 0;
+		i--;
+	}
+}
 
-    ft_printf("%d\n", getpid());
+void	check(int *i)
+{
+	if (!*i)
+		*i = 0;
+}
 
+void	send(int user, siginfo_t *var, void *ptr1)
+{
+	static int	i;
+	static int	count[8] = {0};
+
+	check(&i);
+	if (!g_pid)
+		g_pid = var->si_pid;
+	if (g_pid != var->si_pid)
+	{
+		g_pid = var->si_pid;
+		reset(&i, count);
+	}
+	if (user == SIGUSR1)
+	{
+		count[i++] = 1;
+		if (i == 8)
+		{
+			i = 0;
+			convertingtoascii(count);
+		}
+	}
+	else if (user == SIGUSR2)
+	{
+		count[i++] = 0;
+		if (i == 8)
+		{
+			i = 0;
+			kill(g_pid, SIGUSR2);
+			convertingtoascii(count);
+		}
+	}
+}
+
+int	main(int argc, char *argv[])
+{
+	struct sigaction	sa;
+
+	sa.sa_sigaction = send;
+	sa.sa_flags = SA_SIGINFO;
+	ft_printf("%d\n", getpid());
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);
-    while(1)
-        sleep(1);
-    
-    return 0;
+	while (1)
+		sleep(1);
+	return (0);
 }

@@ -100,7 +100,6 @@ void	send(int user, siginfo_t *var, void *ptr1)
 		if (i == 8)
 		{
 			i = 0;
-			kill(g_pid, SIGUSR2);
 			convertingtoascii(count);
 		}
 	}

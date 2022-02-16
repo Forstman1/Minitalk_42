@@ -49,22 +49,43 @@ void	sending_utils(int *count, int fd)
 	}
 }
 
-void	convertingbinary(int i, int fd, int *j)
+// void	convertingbinary(int i, int fd, int *j)
+// {
+// 	if (i == 0)
+// 	{
+// 		j[g_i] = 2;
+// 		g_i++;
+// 	}
+// 	else if (i == 1)
+// 	{
+// 		j[g_i] = 1;
+// 		g_i++;
+// 	}
+// 	else if (i > 1)
+// 	{
+// 		convertingbinary((i / 2), fd, j);
+// 		convertingbinary((i % 2), fd, j);
+// 	}
+// }
+
+void	bitshifting(int i, int *count, int fd)
 {
-	if (i == 0)
+	int j;
+
+	j = 0;
+	while (j < 8)
 	{
-		j[g_i] = 2;
-		g_i++;
-	}
-	else if (i == 1)
-	{
-		j[g_i] = 1;
-		g_i++;
-	}
-	else if (i > 1)
-	{
-		convertingbinary((i / 2), fd, j);
-		convertingbinary((i % 2), fd, j);
+		if (i & (128 >> j))
+		{
+			kill(fd, SIGUSR1);
+			usleep(500);
+		}
+		else
+		{
+			kill(fd, SIGUSR2);
+			usleep(500);
+		}
+		j++;
 	}
 }
 
@@ -73,17 +94,16 @@ void	sendingchar(char c, int fd)
 	int	count[8] = {0};
 
 	g_i = 0;
-	convertingbinary(c, fd, count);
-	sending(count, fd);
-	sending_utils(count, fd);
-}
+	// convertingbinary(c, fd, count);
+	bitshifting(c, count, fd);
+	//sending(count, fd);
+	//sending_utils(count, fd);
+} 
 
 void	send(int user)
 {
-	if (user == SIGUSR1)
-		printf("Message received From SIGUSR1\n");
-	if (user == SIGUSR2)
-		printf("Message received From SIGUSR2\n");
+	if (user == SIGUSR1 || user == SIGUSR2)
+		printf("Message Sent\n");
 }
 
 int	main(int argc, char *argv[])

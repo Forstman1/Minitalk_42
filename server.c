@@ -12,19 +12,32 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-#include <stdio.h>
 #include <signal.h>
 #include "libft/libft.h"
 #include "Printf/ft_printf.h"
-#include <sys/signal.h>
+#include <signal.h>
 
-int	g_pid;
-
-void	ft_putchar(int c, int fd)
+void	checkend(int *count, int pid)
 {
-	write(fd, &c, sizeof(c));
-}
+	int	i;
+	int	j;
 
+	i = 7;
+	j = 0;
+	while (i >= 0)
+	{
+		if (count[i] == 0)
+			j++;
+		else
+			break ;
+		i--;
+	}
+	if (j == 8)
+	{
+		usleep(500);
+		kill(pid, SIGUSR1);
+	}
+}
 
 void	reset(int *i, int *count)
 {
@@ -39,13 +52,14 @@ void	reset(int *i, int *count)
 	}
 }
 
-void	convertingtoascii(int *count)
+void	convertingtoascii(int *count, int pid, int *j)
 {
 	int	i;
 	int	decimal;
 	int	weight;
 	int	rem;
 
+	*j = 0;
 	rem = 0;
 	decimal = 0;
 	weight = 1;
@@ -57,7 +71,8 @@ void	convertingtoascii(int *count)
 		weight = weight * 2;
 		i--;
 	}
-	ft_putchar(decimal, 1);
+	checkend(count, pid);
+	ft_putchar_fd(decimal, 1);
 	i = 7;
 	while (i >= 0)
 	{
@@ -65,43 +80,30 @@ void	convertingtoascii(int *count)
 		i--;
 	}
 }
-
-void	check(int *i)
-{
-	if (!*i)
-		*i = 0;
-}
-
+ 
 void	send(int user, siginfo_t *var, void *ptr1)
 {
-	static int	i;
+	static int	i = 0;
 	static int	count[8] = {0};
+	static int	pid = 0;
 
-	check(&i);
-	if (!g_pid)
-		g_pid = var->si_pid;
-	if (g_pid != var->si_pid)
+	ptr1 = (void*)0;
+	if (pid != var->si_pid)
 	{
-		g_pid = var->si_pid;
+		pid = var->si_pid;
 		reset(&i, count);
 	}
 	if (user == SIGUSR1)
 	{
 		count[i++] = 1;
 		if (i == 8)
-		{
-			i = 0;
-			convertingtoascii(count);
-		}
+			convertingtoascii(count, pid, &i);
 	}
 	else if (user == SIGUSR2)
 	{
 		count[i++] = 0;
 		if (i == 8)
-		{
-			i = 0;
-			convertingtoascii(count);
-		}
+			convertingtoascii(count, pid, &i);
 	}
 }
 
@@ -109,8 +111,9 @@ int	main(int argc, char *argv[])
 {
 	struct sigaction	sa;
 
+	argv[1] = "hello";
+	argc = 1;
 	sa.sa_sigaction = send;
-	sa.sa_flags = SA_SIGINFO;
 	ft_printf("%d\n", getpid());
 	sigaction(SIGUSR1, &sa, NULL);
 	sigaction(SIGUSR2, &sa, NULL);

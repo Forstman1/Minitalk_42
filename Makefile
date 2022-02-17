@@ -1,18 +1,28 @@
 
 
 CC	= gcc
-Flags = -Wall -Werror -Wextra
-NAME = server
+flags = -Wall -Werror -Wextra
+NAME = libminitalk.a
 
+.PHONY: $(NAME) all re clean fclean bonus
 
-all: $(NAME)
+all : $(NAME)
 
 $(NAME) : server.c client.c
-	@$(CC) server.c libft.a Printf/libftprintf.a -o server
-	@$(CC) client.c libft.a Printf/libftprintf.a client_utils.c -o client
+	make -C Printf/
+	make -C libft/
+	@$(CC) $(flags) server.c libft/libft.a Printf/libftprintf.a  -o server
+	@$(CC) $(flags) client.c libft/libft.a Printf/libftprintf.a -o client
 	@echo "good to go"
 
+clean :
+	@rm -r $(NAME)
 
-execute_server : $(NAME) 
-	./server
-	@echo "executing server"
+fclean : clean
+	@rm -r client server
+
+re : fclean all
+
+# execute_server : 
+# 	./server
+# 	@echo "executing server"

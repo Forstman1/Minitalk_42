@@ -80,14 +80,14 @@ void	convertingtoascii(int *count, int pid, int *j)
 		i--;
 	}
 }
- 
+
 void	send(int user, siginfo_t *var, void *ptr1)
 {
 	static int	i = 0;
 	static int	count[8] = {0};
 	static int	pid = 0;
 
-	ptr1 = (void*)0;
+	ptr1 = (void *)0;
 	if (pid != var->si_pid)
 	{
 		pid = var->si_pid;
@@ -111,7 +111,7 @@ int	main(int argc, char *argv[])
 {
 	struct sigaction	sa;
 
-	argv[1] = "hello";
+	argv[1] = "";
 	argc = 1;
 	sa.sa_sigaction = send;
 	ft_printf("%d\n", getpid());
